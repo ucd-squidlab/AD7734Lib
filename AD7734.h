@@ -25,9 +25,9 @@ class AD7734 {
     void SetupAD7734(int cs, int rdy, int rst);
 
     //request ADC status register
-    byte GetADCStatus();
+    uint8_t GetADCStatus();
 
-    void ChannelSetup(int adc_channel, byte flags);
+    void ChannelSetup(int adc_channel, uint8_t flags);
 
     //start a single conversion on the passed ADC channel, function does not handle the result of the conversion
     void StartSingleConversion(int adc_channel);
@@ -36,7 +36,7 @@ class AD7734 {
     void StartContinousConversion(int adc_channel);
 
     //request channel data from the ADC
-    short GetConversionData(int adc_channel);
+    double GetConversionData(int adc_channel);
 
     private:
     int _cs, _rdy, _rst;

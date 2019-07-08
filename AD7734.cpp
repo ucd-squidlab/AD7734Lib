@@ -48,9 +48,13 @@
 #define ZERO_SCALE_SELF_CAL_MODE    4 << 5
 #define CH_ZERO_SCALE_SYS_CAL_MODE  6 << 5
 #define CH_FULL_SCALE_SYS_CAL_MODE  7 << 5
+#define CH_EN_CONT_CONV             1 << 3
 
+//resolution for 16 bit mode operation, the ADC resolution can take 2 values, 16 or 24 bit
+#define ADCRES16 65536.0
+//full scale range, can take 4 different values
 #define FSR 20.0
-#define ADC2FLOAT(vin) (vin * FSR/(0.5*0xFFFF) - (FSR/2.0)) 
+#define ADC2DOUBLE(vin) (FSR * ((double)vin - (ADCRES16/2.0)) / ADCRES16) 
 
 AD7734::AD7734() { }
 AD7734::~AD7734() { }
@@ -66,7 +70,7 @@ void AD7734::SetupAD7734(int cs, int rdy, int rst) {
     //set bit order for ADC
     SPI.setBitOrder(_cs, MSBFIRST);
     //set clock divider for DAC
-    SPI.setClockDivider(_cs, SPI_CLOCK_DIV64);
+    //SPI.setClockDivider(_cs, SPI_CLOCK_DIV64);
     //set data mode for dac
     SPI.setDataMode(_cs, SPI_MODE3);
 
@@ -79,8 +83,8 @@ void AD7734::SetupAD7734(int cs, int rdy, int rst) {
     digitalWrite(_rst, HIGH);
 }
 
-byte AD7734::GetADCStatus() {
-    byte data_array;
+uint8_t AD7734::GetADCStatus() {
+    uint8_t data_array;
 
     data_array = READ | ADDR_ADCSTATUS;
 
@@ -89,8 +93,8 @@ byte AD7734::GetADCStatus() {
     return SPI.transfer(_cs, 0);
 }
 
-void AD7734::ChannelSetup(int adc_channel, byte flags) {
-    byte data_array[2];
+void AD7734::ChannelSetup(int adc_channel, uint8_t flags) {
+    uint8_t data_array[2];
 
     data_array[0] = WRITE | ADDR_CHANNELSETUP(adc_channel);
     data_array[1] = flags;
@@ -100,7 +104,7 @@ void AD7734::ChannelSetup(int adc_channel, byte flags) {
 
 //tells the ADC to start a single conversion on the passed channel
 void AD7734::StartSingleConversion(int adc_channel) {
-    byte data_array[2];
+    uint8_t data_array[2];
   
     //setup communication register for writing operation to the mode register
     data_array[0] = WRITE | ADDR_MODE(adc_channel); 
@@ -116,22 +120,24 @@ void AD7734::StartSingleConversion(int adc_channel) {
 
 //tells the ADC to start a continous conversion on the passed channel 
 void AD7734::StartContinousConversion(int adc_channel) {
-    byte data_array[2];
+    uint8_t data_array[4];
   
-    //setup communication register for writing operation to the mode register
-    data_array[0] = WRITE | ADDR_MODE(adc_channel); 
-    
-    //setup mode register 
-    data_array[1] = CONT_CONV_MODE;
+    //address the channel setup register and write to it
+    data_array[0] = WRITE | ADDR_CHANNELSETUP(adc_channel);
+    data_array[1] = CH_EN_CONT_CONV;
+
+    //address the channel mode register and write to it
+    data_array[2] = WRITE | ADDR_MODE(adc_channel);  
+    data_array[3] = CONT_CONV_MODE | 1 << 2;
     
     //send off command
-    SPI.transfer (_cs, data_array, 2);
+    SPI.transfer (_cs, data_array, 4);
 
     //data is ready when rdy goes low
 }
 
-short AD7734::GetConversionData(int adc_channel) {
-    byte data_array;
+double AD7734::GetConversionData(int adc_channel) {
+    uint8_t data_array, upper, lower;
     
     //setup communication register for reading channel data
     data_array = READ | ADDR_CHANNELDATA(adc_channel);
@@ -140,11 +146,10 @@ short AD7734::GetConversionData(int adc_channel) {
     SPI.transfer(_cs, data_array);
 
     //read upper and lower bytes of channel data register (16 bit mode)
-    byte upper, lower;
     upper = SPI.transfer(_cs, 0);
     lower = SPI.transfer(_cs, 0);
 
-    short result = upper << 8 | lower;
+    uint16_t result = upper << 8 | lower;
 
-    return result;
+    return ADC2DOUBLE(result);
 }
