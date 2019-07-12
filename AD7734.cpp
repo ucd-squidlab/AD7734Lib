@@ -128,7 +128,7 @@ void AD7734::StartContinousConversion(int adc_channel) {
 
     //address the channel mode register and write to it
     data_array[2] = WRITE | ADDR_MODE(adc_channel);  
-    data_array[3] = CONT_CONV_MODE | 1 << 2;
+    data_array[3] = CONT_CONV_MODE;
     
     //send off command
     SPI.transfer (_cs, data_array, 4);
@@ -136,7 +136,7 @@ void AD7734::StartContinousConversion(int adc_channel) {
     //data is ready when rdy goes low
 }
 
-double AD7734::GetConversionData(int adc_channel) {
+uint16_t AD7734::GetConversionData(int adc_channel) {
     uint8_t data_array, upper, lower;
     
     //setup communication register for reading channel data
@@ -151,5 +151,5 @@ double AD7734::GetConversionData(int adc_channel) {
 
     uint16_t result = upper << 8 | lower;
 
-    return ADC2DOUBLE(result);
+    return result;
 }

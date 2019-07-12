@@ -36,7 +36,7 @@ class AD7734 {
     void StartContinousConversion(int adc_channel);
 
     //request channel data from the ADC
-    double GetConversionData(int adc_channel);
+    uint16_t GetConversionData(int adc_channel);
 
     private:
     int _cs, _rdy, _rst;
