@@ -115,7 +115,7 @@ void AD7734::StartSingleConversion(int adc_channel) {
     //send off command
     SPI.transfer (_cs, data_array, 2);
 
-    //data is ready when rdy goes low
+    //data is ready when _rdy goes low
 }
 
 //tells the ADC to start a continous conversion on the passed channel 
@@ -133,7 +133,7 @@ void AD7734::StartContinousConversion(int adc_channel) {
     //send off command
     SPI.transfer (_cs, data_array, 4);
 
-    //data is ready when rdy goes low
+    //data is ready when _rdy goes low
 }
 
 uint16_t AD7734::GetConversionData(int adc_channel) {
