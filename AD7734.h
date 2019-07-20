@@ -1,6 +1,7 @@
 #ifndef AD7734_H_
 #define AD7734_H_
 
+//ADC Channels
 #define ADC_A 0
 #define ADC_B 1
 #define ADC_C 2
@@ -21,7 +22,6 @@ class AD7734 {
 
     //setup ADC SPI communication and pins used with the AD7734
     //cs: chip select pin, rdy: data ready pin, rst: ADC reset pin 
-
     void SetupAD7734(int cs, int rdy, int rst);
 
     //request ADC status register
