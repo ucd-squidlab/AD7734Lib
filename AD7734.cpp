@@ -3,16 +3,14 @@
 #include "AD7734.h"
 
 //ADC symbols
+//All tables & pages reference AD7734 Data Sheet Rev B (4 Channels, AD7732 is 2 Channels)
+//Communications Register, Table 11 Summery
 
-//communications register
-
-//read write bit
+//Read/Write bit (R, W), Table 11
 #define READ  1 << 6
 #define WRITE 0 << 6
 
-//ADC register addresses
-//we are using the AD7734, which has 4 channels
-
+//ADC register addresses, Table 11
 #define ADDR_COM                      0x0
 #define ADDR_IO                       0x1
 #define ADDR_REVISION                 0x2
@@ -22,24 +20,16 @@
 #define ADDR_ADCZEROSCALECAL          0x6
 #define ADDR_ADCFULLSCALE             0x7
 
-//Address macro functions, each takes a value betwene 0 and 3 and returns the address of the desired register
-
+//Address macro functions, returns address for desired register of selected channel (0-3), Table 11
 #define ADDR_CHANNELDATA(adc_channel)   (0x8 + adc_channel)
-
 #define ADDR_CHANNELZEROSCALECAL(adc_channel) (0x10 + adc_channel)
-
 #define ADDR_CHANNELFULLSCALECAL(adc_channel) (0x18 + adc_channel)
-
 #define ADDR_CHANNELSTATUS(adc_channel)(0x20 + adc_channel)
-
 #define ADDR_CHANNELSETUP(adc_channel)(0x28 + adc_channel)
-
 #define ADDR_CHANNELCONVERSIONTIME(adc_channel)(0x30 + adc_channel)
-
 #define ADDR_MODE(adc_channel) (0x38 + adc_channel)
 
-//mode register 
-
+//Operational Mode Register, Table 12
 //mode bits (MD2, MD1, MD0 bits)
 #define IDLE_MODE                   0 << 5
 #define CONT_CONV_MODE              1 << 5
@@ -50,8 +40,8 @@
 #define CH_FULL_SCALE_SYS_CAL_MODE  7 << 5
 #define CH_EN_CONT_CONV             1 << 3
 
-//resolution for 16 bit mode operation, the ADC resolution can take 2 values, 16 or 24 bit
-#define ADCRES16 65536.0
+//resolution for 16 bit mode operation, the ADC supports 16 or 24 bit resolution.
+#define ADCRES16 65535.0
 //full scale range, can take 4 different values
 #define FSR 20.0
 #define ADC2DOUBLE(vin) (FSR * ((double)vin - (ADCRES16/2.0)) / ADCRES16) 
@@ -83,6 +73,7 @@ void AD7734::SetupAD7734(int cs, int rdy, int rst) {
     digitalWrite(_rst, HIGH);
 }
 
+//return ADC status register, pg. 16
 uint8_t AD7734::GetADCStatus() {
     uint8_t data_array;
 
