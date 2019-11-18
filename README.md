@@ -6,7 +6,7 @@ Arduino library for controlling the *[ADC: AD7734]* chipset using SPI protocol
 
 ### Link Pin Configuration
 
-   | Link | Connection [Default] | Description<sup>[1](#1)</sup>                                 |
+   | Link | Connection [Default] | Description<sup>[1](#Inline-Notes)</sup>                                 |
    | ---- | :------------------: | ------------------------------------------------------ |
    | LK1  |         A/B          | A: REFIN(+) Source: AVDD <br> B: REFIN(-) Source: AGND |
    | LK2  |          A           | MCLKIN  (A for integrated clock)                       |
@@ -38,6 +38,7 @@ Arduino library for controlling the *[ADC: AD7734]* chipset using SPI protocol
    | LK28 |       Removed        | PSEN → DGRN : DownLoad                                 |
    | LK29 |       Inserted       | EXT  → DRGN : Enable External Controller               |
    | LK30 |       Removed        | AVDD ↔ DVDD Connector (not listed in documentation)    |
+
 <sub> Updated: 17 July 2019 </sub>
 ![ADC LINKS IMAGE](./docs/LINK.EVAL-AD7734EB.20190717.jpg)
 ![ADC LINKS SKETCH](./docs/LINK.EVAL-AD7734EB.20190717.png)
@@ -45,4 +46,6 @@ Arduino library for controlling the *[ADC: AD7734]* chipset using SPI protocol
 [ADC: AD7734]: https://www.analog.com/media/en/technical-documentation/data-sheets/AD7734.pdf
 [EVAL-AD7734EB]: ./docs/EVAL-AD7734EB_revA.pdf
 
-###### 1 - Pin Description is best guess from documentation & wiring schematic. Defaults are unkown. U1 socket is populated with the AD7734 Chipset."
+###### Inline Notes
+
+1. Pin Description is best guess from documentation & wiring schematic. Defaults are unkown. U1 socket is populated with the AD7734 Chipset."
