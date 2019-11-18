@@ -30,13 +30,13 @@ Arduino library for controlling the *[ADC: AD7734]* chipset using SPI protocol
    | LK20 |       Inserted       | BIA  → R1 → U1<sub>20 </sub>BIASHI                     |
    | LK21 |       Removed        | AGND ↔ AGND                                            |
    | LK22 |       Removed        | TEST SHORT: P1 ↔ P2                                    |
-   | LK23 |       Removed        | TEST GND&nbsp; : P2(P1) → AGND                         |
-   | LK24 |       Removed        | TEST BIAS :  P1(P2) → BIAS                             |
+   | LK23 |       Removed        | TEST GND: P2(P1) → AGND                         |
+   | LK24 |       Removed        | TEST BIAS:  P1(P2) → BIAS                             |
    | LK25 |       Inserted       | AVDD → R7 + ( R8 \| D6) → U1<sub>7 </sub>P0            |
    | LK26 |       Inserted       | AVDD → R9 + (R10 \| D5) → U1<sub>7 </sub>SYNC/P1       |
    | LK27 |       Removed        | TRIG → R13 → U1<sub>7 </sub>P0                         |
-   | LK28 |       Removed        | PSEN → DGRN : DownLoad                                 |
-   | LK29 |       Inserted       | EXT  → DRGN : Enable External Controller               |
+   | LK28 |       Removed        | PSEN → DGRN: DownLoad                                 |
+   | LK29 |       Inserted       | EXT  → DRGN: Enable External Controller               |
    | LK30 |       Removed        | AVDD ↔ DVDD Connector (not listed in documentation)    |
 
 <sub> Updated: 17 July 2019 </sub>
@@ -48,4 +48,4 @@ Arduino library for controlling the *[ADC: AD7734]* chipset using SPI protocol
 
 ###### Inline Notes
 
-1. Pin Description is best guess from documentation & wiring schematic. Defaults are unkown. U1 socket is populated with the AD7734 Chipset."
+1. Pin Description is best guess from documentation & wiring schematic. Defaults are unknown. U1 socket is populated with the AD7734 Chipset."
